@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICBT Southern Campus | Cricket Champions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-blue: #002d72; 
+            --accent-blue: #00a3e0;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        header {
+            background: var(--primary-blue);
+            padding: 10px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 30px; }
+
+        .venue-map-link {
+            color: var(--white);
+            background: var(--accent-blue);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            box-shadow: 0 0 10px rgba(0, 163, 224, 0.5);
+        }
+
+        .venue-map-link:hover { transform: scale(1.1); background: var(--white); color: var(--accent-blue); }
+
+        .logo-box img { height: 100px; filter: brightness(1.2); }
+
+        nav ul { list-style: none; display: flex; gap: 30px; margin: 0; }
+        nav a { 
+            text-decoration: none; 
+            color: var(--white); 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        nav a:hover { color: var(--accent-blue); }
+
+        .hero {
+            height: 85vh;
+            background: linear-gradient(135deg, rgba(0,45,114,0.9), rgba(0,45,114,0.4)), url('https://images.unsplash.com/photo-1531415074968-036ba1b575da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
+        }
+
+        .hero-content h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.5rem; 
+            margin: 0; 
+            line-height: 1;
+            font-weight: 800;
+        }
+        
+        .hero-content p { font-size: 1.5rem; opacity: 0.9; margin-top: 10px; }
+
+        .section { padding: 80px 10%; text-align: center; }
+        .section-title { font-size: 2.5rem; color: var(--primary-blue); margin-bottom: 40px; font-family: 'Montserrat'; }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: var(--primary-blue);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            display: inline-block;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,45,114,0.3);
+        }
+
+        .btn:hover { background: var(--accent-blue); transform: translateY(-3px); }
+
+        #paymentOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-modal {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            width: 450px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        .organizer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .org-card {
+        background: rgba(0, 46, 114, 0.986);
+        padding: 25px;
+        border-radius: 15px;
+        border-bottom: 4px solid var(--accent-blue);
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .org-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        background: #000000e7;
+    }
+
+    .main-org {
+        background: var(--primary-blue);
+        color: rgb(255, 255, 255);
+        grid-column: span 1;
+        border-bottom: 4px solid var(--white);
+    }
+
+    .main-org .contact-link { color: #00a3e0; background: rgb(94, 101, 199); padding: 5px 15px; border-radius: 20px; }
+
+    .org-card h3 { margin: 10px 0 5px 0; font-size: 1.1rem; }
+    
+    .contact-link {
+        text-decoration: none;
+        color: var(--primary-blue);
+        font-weight: bold;
+        font-size: 0.9rem;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .contact-link i { margin-right: 5px; }
+
+        footer {
+            background: var(--primary-blue);
+            color: white;
+            padding: 60px 10% 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: left;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <a href="https://maps.google.com/?q=Uyanwatta+Stadium+Matara" target="_blank" class="venue-map-link" title="Open Venue Map">
+                <i class="fas fa-location-arrow"></i>
+            </a>
+            <div class="logo-box">
+                <img src="logo.png" alt="ICBT Logo">
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#register">Register</a></li>
+                <li><a href="#payment">Payment</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#organizers">Organizers</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <p>ICBT SOUTHERN CAMPUS PRESENTS</p>
+            <h1>CRICKET CHAMPIONS<br><span style="color:var(--accent-blue)">LEAGUE 2026</span></h1>
+            <a href="#register" class="btn" style="margin-top:30px">Get Started</a>
+        </div>
+    </section>
+
+    <section class="section" id="about">
+        <h2 class="section-title">Tournament Overview</h2>
+        <div style="max-width: 800px; margin: 0 auto; line-height: 1.8; color: #666;">
+            Experience the spirit of cricket at the <strong>Uyanwatta Playground, Matara</strong>. 
+            Organized by the ICBT Southern Campus this match brings together talent teamwork and excitement.
+        </div>
+    </section>
+
+    <section class="section" style="background: #f1f4f8;" id="register">
+        <h2 class="section-title">Registration & Join</h2>
+        <div class="card">
+            <h3>Interest Survey</h3>
+            <p>Check if you'd like to create or join a match team via our Google Form.</p>
+            <a href="https://forms.gle/eTTFDUSrv7i8LAaf8" target="_blank" class="btn" style="background:#db4437">Open Google Form</a>
+            <hr style="margin: 40px 0; opacity: 0.1;">
+            <h3>Contact Organizer</h3>
+            <div style="text-align: left;">
+                <label>Student Name</label>
+                <input type="text" id="sName" placeholder="Enter Full Name">
+                <label>Batch Name</label>
+                <input type="text" id="sBatch" placeholder="e.g. Cyber Security Batch 05">
+                <button class="btn" style="width: 100%; margin-top: 20px;" onclick="whatsappRedirect()">Send Registration via WhatsApp</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="payment">
+        <h2 class="section-title">Participation Fee</h2>
+        <div class="card" style="border-top: 5px solid var(--accent-blue);">
+            <h1 style="font-size: 3rem; margin: 0;">LKR 2,000</h1>
+            <p style="color: #888;">Payment Tournament</p>
+            <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px;">
+                <button class="btn" onclick="openPayment()">Add Card Receipt</button>
+                <button class="btn" style="background: #eee; color: #333; box-shadow: none;" onclick="alert('Please visit the Champions finance desk for cash payments.')">Pay by Cash</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="paymentOverlay">
+    <div class="payment-modal">
+        <h2 style="color: var(--primary-blue)">Upload Payment Receipt</h2>
+        <p>Amount to Pay: <b>LKR 2000.00</b></p>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 20px;"> </p>
+        <div style="text-align: left; background: #f9f9f9; padding: 20px; border-radius: 15px; border: 2px dashed #ccc;">
+            <label style="display: block; margin-bottom: 10px; font-weight: bold;">Select Receipt Image:</label>
+            <a href="https://forms.gle/2NBkaxRooRuvJU5s9" target="_blank" class="btn" style="width:100%; text-align: center; background: #28a745;">
+                <i class="fas fa-cloud-upload-alt"></i> Upload to Google Drive
+            </a>
+        </div>
+
+        <p style="margin-top: 15px; font-size: 0.75rem; color: #999;">
+        </p>
+
+        <button class="btn" style="width:100%; margin-top:10px;" onclick="closePayment()">Done</button>
+        <p style="text-align:center; font-size: 0.8rem; color: #aaa; cursor: pointer; margin-top: 15px;" onclick="closePayment()">Cancel</p>
+    </div>
+</div>
+
+    <footer id="contact">
+        <div class="footer-grid">
+            <div>
+                <h3>Event Organizer</h3>
+                <p><b>Nawod Nawarathna</b><br>
+                ICBT Southern Campus<br>
+                Matara, Sri Lanka</p>
+            </div>
+            <div>
+                <h3>Contact Details</h3>
+                <p><i class="fas fa-phone"></i> +94 76 741 9179</p>
+                <p><i class="fas fa-envelope"></i> navodn@icbtcampus.edu.lk</p>
+                <a href="https://wa.me/94767419179" class="whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                </a>
+            </div>
+            <div>
+                <h3>Venue Location</h3>
+                <p>Uyanwatta Playground<br>Near Matara Fort</p>
+                <a href="https://icbt.lk/icbt-southern-campus-matara/" style="color:var(--accent-blue)">Official Campus Website</a>
+            </div>
+        </div> <br>
+        
+
+    <section class="section" id="organizers" style="background: #fff;">
+        <h2 class="section-title">Event Organizers</h2>
+        <p style="margin-bottom: 40px; color: #666;">For any issues please contact the organizing committee below.</p>
+        <div class="organizer-grid">
+            <div class="org-card main-org">
+                <i class="fas fa-user-tie"></i>
+                <h3>Nawod Nawarathna</h3>
+                <p>Chief Organizer</p>
+                <a href="https://wa.me/94767419179" class="contact-link"><i class="fas fa-phone-alt"></i>Contact Now</a>
+            </div>
+
+            <div class="org-card">
+                <i class="fas fa-user-tie"></i>
+                <h3>Chamidu</h3>
+                <p>Chief Organizer</p>
+                    <a href="https://wa.me/94767419179" class="contact-link"><i class="fas fa-phone"></i> Contact Now</a>
+            </div>
+
+            <div class="org-card">
+                <i class="fas fa-user-tie"></i>
+                <h3>Chamod</h3>
+                <p>Chief Organizer</p>
+                    <a href="https://wa.me/94767419179" class="contact-link"><i class="fas fa-phone"></i> Contact Now</a>
+            </div>
+
+            <div class="org-card">
+                <i class="fas fa-user-tie"></i>
+                <h3>Rasindu</h3>
+                <p>Chief Organizer</p>
+                    <a href="https://wa.me/94767419179" class="contact-link"><i class="fas fa-phone"></i> Contact Now</a>
+            </div>
+
+            <div class="org-card">
+                <i class="fas fa-user-tie"></i>
+                <h3>Nisal</h3>
+                <p>Chief Organizer</p>
+                    <a href="https://wa.me/94767419179" class="contact-link"><i class="fas fa-phone"></i> Contact Now</a>
+            </div>
+
+            <div class="org-card">
+                <i class="fas fa-user-tie"></i>
+                <h3>Nethmina</h3>
+                <p>Chief Organizer</p>
+                    <a href="https://wa.me/94767419179" class="contact-link"><i class="fas fa-phone"></i> Contact Now</a>
+            </div>
+
+            <div class="org-card">
+                <i class="fas fa-user-tie"></i>
+                <h3>Methmi</h3>
+                <p>Chief Organizer</p>
+                    <a href="https://wa.me/94767419179" class="contact-link"><i class="fas fa-phone"></i> Contact Now</a>
+            </div>
+        </div>
+    </section>
+
+    <div style="text-align:center; margin-top:50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-size: 0.8rem; opacity: 0.6;">
+            Designed for ICBT Southern Campus Tournament.
+    </div>
+
+    </footer>
+
+    <script>
+        function openPayment() {
+            document.getElementById('paymentOverlay').style.display = 'flex';
+        }
+        function closePayment() {
+            document.getElementById('paymentOverlay').style.display = 'none';
+        }
+        function whatsappRedirect() {
+            const name = document.getElementById('sName').value;
+            const batch = document.getElementById('sBatch').value;
+            if(!name || !batch) { alert("Please enter name and batch"); return; }
+
+            const msg = `Hello Sir, I am Student ${name} in Batch ${batch}. I am interested in registering for this cricket tournament. Could you please provide me with more details regarding the schedule, registration process, and participation requirements?`;
+            window.open(`https://wa.me/94767419179?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
